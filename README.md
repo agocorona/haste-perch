@@ -1,7 +1,7 @@
 haskell-js-html-builder
 =================
 
-A monad and monoid instance for Haste.DOM 
+A monad and monoid instance for Haste.DOM elements 
 
 Haste is a compiler that generates Javascript code from Haskell.
 
@@ -46,3 +46,10 @@ works
 
 
  
+How it works
+------------
+
+
+The basic element is a "builder" that has a "hole" parameter and IO action about what element will be created. The hole contains the parent of the element being created. Upon created, it is added to the parent and return itself as parent of the next elements.  to append two elements, both are added to the parent.
+
+The Monad instance is there in order to use the do notation, that add a new level of syntax in the style of the package blaze-html .  This monad invoques the monoid.
