@@ -7,11 +7,11 @@ Haste is a compiler that generates Javascript code from Haskell.
 
 https://raw.githubusercontent.com/valderman/haste-compiler
 
-The Haste.DOM module define  a thin lauer over the JavaScript DOM. That makes the creation and manipulation of DOM elements  as painful as in JavaScript.
+The Haste.DOM module define a thin layer over the JavaScript DOM. That makes the creation and manipulation of DOM elements  as painful as in JavaScript.
 
 This package makes the creation of DOM elements easy with a syntax  similar to other haskell HTML generators, using monoids and monads, such is the case of the package blaze-html.
 
-This is an example. `withElem`  is a Haste.DOM call that give the DOM object whose id is "idelem", that has been created "by hand" in Main.hs
+This is an example. `withElem`  is a Haste.DOM call that give the DOM object whose id is "idelem", that has been created "by hand" in Main.hs. The builder takes this element and add content to it:
 
       main= do
         withElem "idelem" . build $ do
@@ -26,6 +26,7 @@ This is an example. `withElem`  is a Haste.DOM call that give the DOM object who
        p cont = nelem "p"  `child`  cont
 
 The equivalent monoid expression can also be used, by concatenating elements with the operator <>
+
 
 Status
 ---------
