@@ -1,7 +1,7 @@
 haskell-js-html-builder
 =================
 
-A monad and monoid instance for Haste.DOM elements 
+A monad and monoid instance for Haste.DOM elements. It can be ported to other haskell-js compilers
 
 Haste is a compiler that generates Javascript code from Haskell.
 
