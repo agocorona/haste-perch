@@ -27,6 +27,29 @@ This is an example. `withElem`  is a Haste.DOM call that give the DOM object who
 
 The equivalent monoid expression can also be used, by concatenating elements with the operator <>
 
+How to run
+----------
+
+install the ghc compiler
+
+install Haste:
+
+    >cabal install haste-compiler
+
+clone haskell-js-html-builder
+  
+    >git clone http://github.com/agocorona/haskell-js-html-builder.git
+    
+compile
+
+    >hastec Main.hs
+    
+browse the Main.html file. In windows simply execute it in the command line:
+
+    >Main.html
+
+Execute it in the same directory where Main.js is, since it references it assuming that it is in the current folder
+
 
 Status
 ---------
