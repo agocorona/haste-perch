@@ -5,7 +5,7 @@ A monad and monoid instance for Haste.DOM elements. It can be ported to other ha
 
 Haste is a compiler that generates Javascript code from Haskell.
 
-https://raw.githubusercontent.com/valderman/haste-compiler
+https://github.com/valderman/haste-compiler
 
 The Haste.DOM module define a thin layer over the JavaScript DOM. That makes the creation and manipulation of DOM elements  as painful as in JavaScript.
 
@@ -75,4 +75,4 @@ How it works
 
 The basic element is a "builder" that has a "hole" parameter and a IO action about what element will be created. The hole contains the parent of the element being created. Upon created, it is added to the parent and return itself as parent of the next elements.  To append two elements, both are added to the parent.
 
-The Monad instance is there in order to use the do notation, that add a new level of syntax, in the style of the package blaze-html .  This monad invoques the same appending mechanism.
+The Monad instance is there in order to use the do notation, that add a new level of syntax, in the style of the package blaze-html. This monad invoques the same appending mechanism.
