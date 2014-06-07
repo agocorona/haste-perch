@@ -8,7 +8,8 @@
 -- Stability   :  experimental
 -- Portability :
 --
--- |
+-- | Monad and Monoid instances for a builder that hang DOM elements from the
+-- current parent element. It uses Haste.DOM from the haste-compiler
 --
 -----------------------------------------------------------------------------
 {-#LANGUAGE TypeSynonymInstances, FlexibleInstances, DeriveDataTypeable #-}
@@ -24,19 +25,15 @@ type JSBuilder = JSBuilderM ()
 
 instance Monoid (JSBuilderM a) where
     mappend mx my= JSBuilder $ \e -> do
-         x <- build mx e
-         y <- build my e
-         addChild x e
-         addChild y e
+         build mx e
+         build my e
          return e
     mempty  = JSBuilder return
 
 instance Monad JSBuilderM where
    (>>) x y= mappend (unsafeCoerce x) y
-
-
+   (>>=) = error "bind (>>=) invocation creating DOM elements"
    return  = mempty
-
 
 child :: ToElem a => JSBuilder -> a -> JSBuilder
 child me ch= JSBuilder $ \e' -> do

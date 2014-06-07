@@ -8,7 +8,7 @@ import Prelude hiding (div)
 main= do
   withElem "idelem" . build $ do
     div $ do
-         div  $ do
+         div $ do
                p "hello"
                nelem "p" `attr` ("style","color:red")  `child`  "world"
 
