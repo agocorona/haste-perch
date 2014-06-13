@@ -12,10 +12,14 @@
 -- current parent element. It uses Haste.DOM from the haste-compiler
 --
 -----------------------------------------------------------------------------
-{-#LANGUAGE TypeSynonymInstances, FlexibleInstances, DeriveDataTypeable #-}
+{-#LANGUAGE TypeSynonymInstances, FlexibleInstances
+            , OverloadedStrings, DeriveDataTypeable #-}
 module Builder where
 import Data.Typeable
+import Haste
 import Haste.DOM
+import Haste.Foreign(ffi)
+import Data.Maybe
 import Data.Monoid
 import Unsafe.Coerce
 
@@ -35,12 +39,7 @@ instance Monad JSBuilderM where
    (>>=) = error "bind (>>=) invocation creating DOM elements"
    return  = mempty
 
-child :: ToElem a => JSBuilder -> a -> JSBuilder
-child me ch= JSBuilder $ \e' -> do
-        e <- build me e'
-        let t = toElem ch
-        r <- build t e
-        return e
+
 
 class ToElem a where
   toElem :: a -> JSBuilder
@@ -51,6 +50,8 @@ instance ToElem String where
         addChild e' e
         return e'
 
+--instance Show a => ToElem a where toElem = toElem . show
+
 instance ToElem (JSBuilderM a) where toElem e = unsafeCoerce e
 
 attr tag (n, v)=JSBuilder $ \e -> do
@@ -58,15 +59,46 @@ attr tag (n, v)=JSBuilder $ \e -> do
         setAttr tag' n v
         return tag'
 
-
 nelem s= JSBuilder $ \e ->do
-    e' <- newElem s
-    addChild e' e
-    return e'
+        e' <- newElem s
+        addChild e' e
+        return e'
+
+child :: ToElem a => JSBuilder -> a -> JSBuilder
+child me ch= JSBuilder $ \e' -> do
+        e <- build me e'
+        let t = toElem ch
+        r <- build t e
+        return e
+
+addEvent :: JSBuilder -> Event IO b -> IO () -> JSBuilder
+addEvent be event action= JSBuilder $ \e -> do
+     e' <- build be e
+     has <- getAttr e' "hasevent"
+     case has of
+       "true" -> return e'
+       _ -> do
+        onEvent e' event $ unsafeCoerce $ action -- >> focus e
+        setAttr e' "hasevent" "true"
+        return e'
+
+elemsByTagName :: String -> IO [Elem]
+elemsByTagName = ffi "(function(s){document.getElementsByTagName(s)})"
+
+parent :: Elem -> IO Elem
+parent= ffi "(function(e){return e.parentNode;})"
+
+br= nelem "br"
 
 
+div cont=  nelem "div" `child`  cont
+
+p cont = nelem "p" `child` cont
+
+b cont = nelem "b" `child` cont
 
 
+(!) pe atrib = \e ->  pe e `attr` atrib
 
-
+atr n v= (n,v)
 

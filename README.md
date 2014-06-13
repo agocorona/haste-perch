@@ -14,16 +14,15 @@ This package makes the creation of DOM elements easy with a syntax  similar to o
 This is an example. `withElem`  is a Haste.DOM call that give the DOM object whose id is "idelem", that has been created "by hand" in Main.hs. The builder takes this element and add content to it:
 
       main= do
-        withElem "idelem" . build $ do
-        div $ do
-           div  $ do
+       withElem "idelem" $   build $ do
+       div $ do
+         div $ do
                p "hello"
-               nelem "p" `attr` ("style","color:red")  `child`  "world" 
-        return ()
+               p ! atr "style" "color:red" $   "world"
 
-       div cont=  nelem "div" `child`  cont
+       return ()
 
-       p cont = nelem "p"  `child`  cont
+       
 
 The equivalent monoid expression can also be used, by concatenating elements with the operator <>
 
@@ -54,25 +53,21 @@ Execute it in the same directory where Main.js is, since it references it assumi
 Status
 ---------
 
-Still there are no operators defined for attribute addition, so attributes only can be applied to full elements, not to container elements.
-For example :
-       
-    div `attr` ....  content   
+Standard tags and attributes are not defined except div, p and b. Define your owns. For example:
 
-will produce an error. 
+div cont=  nelem "div" `child`  cont
 
-but:
+p cont = nelem "p" `child` cont
 
-    div  content  `attr` ....
+b cont = nelem "b" `child` cont
 
-works
-
-
+onclick= atr "onclick"
  
+
 How it works
 ------------
 
 
-The basic element is a "builder" that has a "hole" parameter and a IO action about what element will be created. The hole contains the parent (Elem) of the element being created. Upon created, it is added to the parent and return itself as parent of the next elements. To append two elements, both are added to the parent.
+The basic element is a "builder" that has a "hole" parameter and a IO action about what element will be created. The hole will receive the parent (Elem) of the element/s that will be created by the builder. Upon created, an elem  is added to the parent and return itself as parent of the next elements. To append two elements, both are added to the parent.
 
 The Monad instance is there in order to use the do notation, that add a new level of syntax, in the style of the package blaze-html. This monad invokes the same appending mechanism.
