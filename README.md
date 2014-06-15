@@ -79,13 +79,13 @@ Status
 
 Standard tags and attributes are not defined except div, p and b. Define your owns. For example:
 
-div cont=  nelem "div" `child`  cont
+      div cont=  nelem "div" `child`  cont
 
-p cont = nelem "p" `child` cont
+      p cont = nelem "p" `child` cont
 
-b cont = nelem "b" `child` cont
+      b cont = nelem "b" `child` cont
 
-onclick= atr "onclick"
+      onclick= atr "onclick"
  
 
 How it works
