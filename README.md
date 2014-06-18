@@ -61,7 +61,7 @@ install Haste:
 
 clone haskell-js-html-builder
   
-    >git clone http://github.com/agocorona/haskell-js-html-builder.git
+    >git clone http://github.com/agocorona/haste-perch.git
     
 compile
 
