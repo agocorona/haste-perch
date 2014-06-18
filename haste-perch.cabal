@@ -1,0 +1,38 @@
+name:                haste-perch
+version:             0.1.0.0
+synopsis:            Create dynamic HTML in the browser using blaze-html-style notation with Haste 
+description:         Perch defines builder elements (perchs) for Haste.DOM elements that are appendable, so that dynamic HTML can be created in the client in a natural way, like textual HTML, but programmatically and with the advantage of static type checking. It can be ported to other haskell-js compilers
+                     .
+                     Haste is a compiler that generates Javascript code from Haskell.
+                     .
+                     https://github.com/valderman/haste-compiler
+                     .
+                     The Haste.DOM module define a thin layer over the JavaScript DOM. The DOM is a low level HTML tree manipulation API. That makes the creation and manipulation of DOM elements almost as painful as in JavaScript.
+                     .
+                     This package makes the creation of DOM elements easy with a syntax similar to other haskell HTML generators, using monoids and monads, such is the case of the package blaze-html.
+                     .
+                     http://hackage.haskell.org/package/blaze-html
+                     .
+                     Since the creation is in the browser, that permit quite dynamic pages for data
+                     presentation, and interctive textual (a.k.a "serious") applications and in general
+                     the development of client-side web frameworks using haskell with the haste compiler.
+ 
+homepage:            https://github.com/agocorona/haste-perch
+license:             BSD3
+license-file:        LICENSE
+author:              Alberto G. Corona
+maintainer:          agocorona@gmail.com
+-- copyright:           
+category:            Web
+build-type:          Simple
+extra-source-files:  README.md
+cabal-version:       >=1.10
+extra-source-files:  Main.html
+
+library
+  exposed-modules:     Haste.Perch
+  other-modules:       Main
+  -- other-extensions:    
+  build-depends:       base >=4.6 && <4.7, haste-compiler, mtl
+  -- hs-source-dirs:      
+  default-language:    Haskell2010
