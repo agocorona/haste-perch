@@ -5,16 +5,16 @@ description:         Perch defines builder elements (perchs) for Haste.DOM eleme
                      .
                      Haste is a compiler that generates Javascript code from Haskell.
                      .
-                     https://github.com/valderman/haste-compiler
+                     <https://github.com/valderman/haste-compiler>
                      .
                      The Haste.DOM module define a thin layer over the JavaScript DOM. The DOM is a low level HTML tree manipulation API. That makes the creation and manipulation of DOM elements almost as painful as in JavaScript.
                      .
-                     This package makes the creation of DOM elements easy with a syntax similar to other haskell HTML generators, using monoids and monads, such is the case of the package blaze-html.
+                     This package makes the creation of DOM elements easy with a syntax similar to other haskell HTML generators, using monoids and monads, such as the case of the package blaze-html.
                      .
-                     http://hackage.haskell.org/package/blaze-html
+                     <http://hackage.haskell.org/package/blaze-html>
                      .
-                     Since the creation is in the browser, that permit quite dynamic pages for data
-                     presentation, and interctive textual (a.k.a "serious") applications and in general
+                     Since the creation is in the browser, that permits quite dynamic pages for data
+                     presentation, and interactive textual (a.k.a "serious") applications and in general
                      the development of client-side web frameworks using haskell with the haste compiler.
  
 homepage:            https://github.com/agocorona/haste-perch
