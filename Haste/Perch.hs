@@ -19,10 +19,10 @@ module Haste.Perch where
 import Data.Typeable
 import Haste
 import Haste.DOM
-import Haste.Foreign(ffi)
 import Data.Maybe
 import Data.Monoid
 import Unsafe.Coerce
+
 
 newtype PerchM a= Perch{build :: Elem -> IO Elem} deriving Typeable
 
@@ -60,6 +60,7 @@ attr tag (n, v)=Perch $ \e -> do
         setAttr tag' n v
         return tag'
 
+nelem :: String -> Perch
 nelem s= Perch $ \e ->do
         e' <- newElem s
         addChild e' e
@@ -72,25 +73,22 @@ child me ch= Perch $ \e' -> do
         r <- build t e
         return e
 
-addEvent :: Perch -> Event IO b -> IO () -> Perch
+addEvent :: Perch -> Event IO a -> a -> Perch
 addEvent be event action= Perch $ \e -> do
      e' <- build be e
-     has <- getAttr e' "hasevent"
+     let atr= evtName event
+     has <- getAttr e'  atr -- "hasevent"
      case has of
        "true" -> return e'
        _ -> do
-        onEvent e' event $ unsafeCoerce $ action -- >> focus e
-        setAttr e' "hasevent" "true"
+        onEvent e' event  action -- >> focus e
+        setAttr e' atr "true"
         return e'
 
-elemsByTagName :: String -> IO [Elem]
-elemsByTagName = ffi "(function(s){document.getElementsByTagName(s)})"
-
-parent :: Elem -> IO Elem
-parent= ffi "(function(e){return e.parentNode;})"
 
 br= nelem "br"
 
+ctag tag cont= nelem tag `child` cont
 
 div cont=  nelem "div" `child`  cont
 
@@ -98,8 +96,42 @@ p cont = nelem "p" `child` cont
 
 b cont = nelem "b" `child` cont
 
+a cont = nelem "a" `child` cont
+
+h1 cont= nelem "h1" `child` cont
 
 (!) pe atrib = \e ->  pe e `attr` atrib
 
 atr n v= (n,v)
+
+style= atr "style"
+
+noHtml= mempty :: Perch
+
+canvas cont = nelem "canvas" `child` cont
+
+center cont= nelem "center" `child` cont
+
+img cont = nelem "img" `child` cont
+
+li cont= nelem "li" `child` cont
+
+ul cont= nelem "ul" `child` cont
+
+id = atr "id"
+
+width= atr "width"
+
+height= atr "height"
+
+href= atr "href"
+
+src= atr "src"
+
+table rows= nelem "table" `child` rows
+
+tr rows= nelem "tr" `child` rows
+
+td e= nelem "td" `child` e
+
 

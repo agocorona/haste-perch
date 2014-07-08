@@ -1,7 +1,6 @@
 module Main where
 import Haste.DOM
 import Haste.Perch
-import Control.Monad.State
 import Data.Monoid
 import Prelude hiding (div)
 
