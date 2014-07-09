@@ -112,7 +112,8 @@ canvas cont = nelem "canvas" `child` cont
 
 center cont= nelem "center" `child` cont
 
-img cont = nelem "img" `child` cont
+img :: Perch
+img = nelem "img"
 
 li cont= nelem "li" `child` cont
 
