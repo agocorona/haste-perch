@@ -19,9 +19,12 @@ module Haste.Perch where
 import Data.Typeable
 import Haste
 import Haste.DOM
+import Haste.Foreign(ffi)
 import Data.Maybe
 import Data.Monoid
 import Unsafe.Coerce
+import Data.String
+
 
 
 newtype PerchM a= Perch{build :: Elem -> IO Elem} deriving Typeable
@@ -40,7 +43,8 @@ instance Monad PerchM where
    (>>=) = error "bind (>>=) invocation creating DOM elements"
    return  = mempty
 
-
+instance IsString Perch where
+  fromString= toElem
 
 class ToElem a where
   toElem :: a -> Perch
@@ -85,6 +89,15 @@ addEvent be event action= Perch $ \e -> do
         setAttr e' atr "true"
         return e'
 
+elemsByTagName :: ElemID -> IO [Elem]
+elemsByTagName = ffi "(function(s){document.getElementsByTagName(s)})"
+
+parent :: Elem -> IO Elem
+parent= ffi "(function(e){return e.parentNode;})"
+
+evalFormula :: String  -> IO Double
+evalFormula= ffi "(function(exp){ return eval(exp);})"
+
 
 br= nelem "br"
 
@@ -100,7 +113,22 @@ a cont = nelem "a" `child` cont
 
 h1 cont= nelem "h1" `child` cont
 
-(!) pe atrib = \e ->  pe e `attr` atrib
+h2 cont= nelem "h2" `child` cont
+
+h3 cont= nelem "h3" `child` cont
+
+h4 cont= nelem "h4" `child` cont
+
+type Attribute = (String,String)
+
+class Attributable h where
+ (!) :: h -> Attribute -> h
+
+instance ToElem a => Attributable (a -> Perch) where
+ (!) pe atrib = \e -> pe e `attr` atrib
+
+instance Attributable Perch where
+ (!) = attr
 
 atr n v= (n,v)
 
