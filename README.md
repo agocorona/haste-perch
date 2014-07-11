@@ -78,19 +78,7 @@ browse the Main.html file. In windows simply execute it in the command line:
 Execute it in the same directory where Main.js is, since it references it assuming that it is in the current folder
 
 
-Status
----------
 
-Standard tags and attributes are not defined except div, p and b. Define your owns. For example:
-
-      div cont=  nelem "div" `child`  cont
-
-      p cont = nelem "p" `child` cont
-
-      b cont = nelem "b" `child` cont
-
-      onclick= atr "onclick"
- 
 
 How it works
 ------------
