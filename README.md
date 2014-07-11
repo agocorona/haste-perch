@@ -63,7 +63,11 @@ clone haskell-js-html-builder
   
     >git clone http://github.com/agocorona/haste-perch.git
     
-compile
+install perch
+
+    >haste-inst install
+
+compile the main program
 
     >hastec Main.hs
     
