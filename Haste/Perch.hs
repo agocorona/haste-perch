@@ -16,14 +16,16 @@
             , OverloadedStrings, DeriveDataTypeable, UndecidableInstances
             , OverlappingInstances #-}
 module Haste.Perch where
-import Data.Typeable
+import Data.Typeable 
 import Haste
 import Haste.DOM
+import Haste.Foreign
 import Data.Maybe
 import Data.Monoid
 import Unsafe.Coerce
 import Data.String
 import Control.Monad.IO.Class
+
 
 
 newtype PerchM a= Perch{build :: Elem -> IO Elem} deriving Typeable
@@ -83,11 +85,11 @@ addEvent :: Perch -> Event IO a -> a -> Perch
 addEvent be event action= Perch $ \e -> do
      e' <- build be e
      let atr= evtName event
-     has <- getAttr e'  atr -- "hasevent"
+     has <- getAttr e'  atr
      case has of
        "true" -> return e'
        _ -> do
-        onEvent e' event  action -- >> focus e
+        onEvent e' event  action 
         setAttr e' atr "true"
         return e'
 
@@ -114,6 +116,7 @@ wbr = nelem "wbr"
 
 -- Parent DOM nodes
 --
+
 a cont = nelem  "a" `child` cont
 abbr cont = nelem  "abbr" `child` cont
 address cont = nelem  "address" `child` cont
@@ -238,3 +241,33 @@ height= atr "height"
 href= atr "href"
 
 src= atr "src"
+
+
+---------------- DOM Tree navigation
+
+-- | return the current node
+this :: Perch
+this= Perch $ \e -> return e
+
+-- | goes to the parent node of the first and execute the second
+goParent :: Perch -> Perch -> Perch
+goParent pe pe'= Perch $ \e' -> do
+  e <- build pe e'
+  p <- parent e
+  e2 <- build pe' p
+  return e2
+
+-- | delete the current node. Return the parent
+delete :: Perch
+delete= Perch $ \e -> do
+             p <- parent e
+             removeChild e p
+             return p
+
+-- | delete the children of the current node.
+clear :: Perch
+clear= Perch $ \e -> clearChildren e >> return e
+
+
+parent :: Elem -> IO Elem
+parent= ffi "(function(e){return e.parentNode;})"
