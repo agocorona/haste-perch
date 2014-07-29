@@ -15,34 +15,36 @@ http://hackage.haskell.org/package/blaze-html
 
 This is an example. `withElem`  is a Haste.DOM call that give the DOM object whose id is "idelem", that has been created "by hand" in Main.hs. The program takes this element and add content to it:
 
-      main= do
-       withElem "idelem" $   build $ do
-       div $ do
-         div $ do
-               p "hello"
-               p ! atr "style" "color:red" $   "world" 
-
-       return ()
+```haskell
+main :: IO ()
+main = do
+  withElem "idelem" $ build $ do
+    div $ do
+      addEvent this OnClick $ \_ _ -> alert "hello, world!"
+      div $ do
+        p "hello"
+        p ! atr "style" "color:red" $ "world"
+  return ()
+```
 
 Creates these element:
 
-       <div id= "idelem">  <-- was already in the HTNL
-           <div>
-             <div>
-                <p> hello </p>
-                <p style= "color:red"> world </p>
-             </div>
-           </div>
-       </div>
-
-       
-       
+```html
+<div id="idelem">  <!-- was already in the HTNL -->
+  <div>
+    <div>
+      <p>hello</p>
+      <p style="color:red">world</p>
+    </div>
+  </div>
+</div>
+```
 
 The  monoid expression can also be used, by concatenating elements with the operator <>
 
         ... term1 <> term2 ...
-      
-      
+
+
 Is equivalent to
 
     do ...
@@ -60,9 +62,9 @@ install Haste:
     >cabal install haste-compiler
 
 clone haskell-js-html-builder
-  
+
     >git clone http://github.com/agocorona/haste-perch.git
-    
+
 install perch
 
     >haste-inst install
@@ -70,7 +72,7 @@ install perch
 compile the main program
 
     >hastec Main.hs
-    
+
 browse the Main.html file. In windows simply execute it in the command line:
 
     >Main.html
