@@ -1,6 +1,6 @@
 name:                haste-perch
-version:             0.1.0.2
-synopsis:            Create dynamic HTML in the browser using declarative notation 
+version:             0.1.0.3
+synopsis:            Create, navigate and modify the DOM tree with composable syntax, with the haste compiler 
 description:         see the description at the homepage.
         
 homepage:            https://github.com/agocorona/haste-perch
@@ -8,7 +8,7 @@ license:             GPL-3
 license-file:        LICENSE
 author:              Alberto G. Corona 
 maintainer:          agocorona@gmail.com
--- copyright:           
+bug-reports:         https://github.com/agocorona/haste-perch/issues
 category:            Web
 build-type:          Simple
 extra-source-files:  README.md, Main.hs
@@ -16,9 +16,14 @@ cabal-version:       >=1.10
 
 extra-source-files: Main.hs, Main.html
 
+source-repository head
+    type: git
+    location: http://github.com/agocorona/haste-perch
+
 Flag Haste-inst
-  Description: sdfsdfd
+  Description: either if it is being compiled with haste-inst or with cabal
   Default: False
+
 library
 
   exposed-modules:      Haste.Perch
