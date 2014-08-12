@@ -1,7 +1,8 @@
 name:                haste-perch
 version:             0.1.0.2
 synopsis:            Create dynamic HTML in the browser using declarative notation 
--- description:         
+description:         see the description at the homepage.
+        
 homepage:            https://github.com/agocorona/haste-perch
 license:             GPL-3
 license-file:        LICENSE
