@@ -77,7 +77,8 @@ browse the Main.html file. In windows simply execute it in the command line:
 
 Execute it in the same directory where Main.js is, since it references it assuming that it is in the current folder
 
-
+Perch not only is for creating HTML.DOM elements, it also can be used to navigate the tree, search
+etc.
 
 
 How it works

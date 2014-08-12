@@ -1,11 +1,16 @@
 module Main where
 import Haste.DOM
 import Haste.Perch
+import Haste.Perch.Literate
 import Data.Monoid
 import Prelude hiding (div)
 
+
+
 main= do
-  withElem "idelem" $   build $ do
+  lit "hello <b>world<b>"
+  body <- getBody
+  build' body $ do
     div $ do
          div $ do
                p "hello"
@@ -13,3 +18,5 @@ main= do
 
   return ()
 
+  where
+  build'= flip build

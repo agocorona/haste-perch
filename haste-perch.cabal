@@ -1,11 +1,11 @@
 name:                haste-perch
-version:             0.1.0.1
+version:             0.1.0.2
 synopsis:            Create dynamic HTML in the browser using declarative notation 
 -- description:         
 homepage:            https://github.com/agocorona/haste-perch
 license:             GPL-3
 license-file:        LICENSE
-author:              Alberto G. Corona
+author:              Alberto G. Corona 
 maintainer:          agocorona@gmail.com
 -- copyright:           
 category:            Web
@@ -15,11 +15,22 @@ cabal-version:       >=1.10
 
 extra-source-files: Main.hs, Main.html
 
+Flag Haste-inst
+  Description: sdfsdfd
+  Default: False
 library
-  exposed-modules:     Haste.Perch
-  -- other-modules:       
-  -- other-extensions:    
-  build-depends:        base >4.0 && <5, haste-lib, transformers
+
+  exposed-modules:      Haste.Perch
+
+ if flag(haste-inst)
+  build-depends:        base >4.0 && <5,
+                        transformers,
+                        haste-lib
+ else
+  build-depends:        base >4.0 && <5,
+                        transformers,
+                        haste-compiler
+                        
   -- hs-source-dirs:      
   default-language:    Haskell2010
 

@@ -81,6 +81,16 @@ child me ch= Perch $ \e' -> do
         r <- build t e
         return e
 
+setHtml :: Perch -> String -> Perch
+setHtml me text= Perch $ \e' -> do
+    e <- build me e'
+    inner e text
+    return e'
+  where
+  inner :: Elem -> String -> IO ()
+  inner e txt = setProp e "innerHTML" txt
+
+
 addEvent :: Perch -> Event IO a -> a -> Perch
 addEvent be event action= Perch $ \e -> do
      e' <- build be e
@@ -271,3 +281,9 @@ clear= Perch $ \e -> clearChildren e >> return e
 
 parent :: Elem -> IO Elem
 parent= ffi "(function(e){return e.parentNode;})"
+
+
+getBody :: IO Elem
+getBody= ffi "(function(){return document.body;})"
+
+
