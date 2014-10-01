@@ -16,7 +16,7 @@
             , OverloadedStrings, DeriveDataTypeable, UndecidableInstances
             , OverlappingInstances #-}
 module Haste.Perch where
-import Data.Typeable 
+import Data.Typeable
 import Haste
 import Haste.DOM
 import Haste.Foreign
@@ -46,7 +46,7 @@ instance Monad PerchM where
 
 instance MonadIO PerchM where
   liftIO mx= Perch $ \e -> mx >> return e
-  
+
 instance IsString Perch where
   fromString= toElem
 
@@ -54,7 +54,7 @@ class ToElem a where
   toElem :: a -> Perch
 
 instance ToElem String where
-   toElem s= Perch $ \e ->do
+   toElem s= Perch $ \e -> do
         e' <- newTextElem s
         addChild e' e
         return e'
@@ -99,7 +99,7 @@ addEvent be event action= Perch $ \e -> do
      case has of
        "true" -> return e'
        _ -> do
-        onEvent e' event  action 
+        onEvent e' event  action
         setAttr e' atr "true"
         return e'
 
@@ -286,4 +286,35 @@ parent= ffi "(function(e){return e.parentNode;})"
 getBody :: IO Elem
 getBody= ffi "(function(){return document.body;})"
 
+
+
+-- ! JQuery-like DOM manipulation: using a selector for querySelectorAll,
+-- it apply the Perch DOM manipulation of the second parameter for each of the matches
+--
+-- Example
+--
+-- > main= do
+-- >  body <- getBody
+-- >  (flip build) body $ pre $ do
+-- >      div ! atr "class" "modify" $ "click"
+-- >      div $ "not changed"
+-- >      div ! atr "class" "modify" $ "here"
+-- >
+-- >      addEvent this OnClick $ \_ _ -> do
+-- >          forElems' ".modify" $  this ! style "color:red"
+forElems' :: String -> Perch -> IO ()
+forElems' for doit= do
+    (flip build) undefined (forElems for doit)
+    return ()
+
+-- ! JQuery-like DOM manipulation: using a selector for querySelectorAll,
+-- it apply the Perch DOM manipulation of the second parameter for each of the matches
+forElems :: String -> Perch -> Perch
+forElems selectors dosomething= Perch $ \e -> do
+    es <- queryAll  selectors
+    mapM (build dosomething) es
+    return e
+    where
+    queryAll ::  String -> IO  [Elem]
+    queryAll = ffi "(function(sel){return document.querySelectorAll(sel);})"
 

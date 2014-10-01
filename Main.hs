@@ -12,7 +12,7 @@ main= do
     div $ do
          div $ do
                p "hello"
-               p ! atr "style" "color:red" $   "world"
+               p ! atr "style" "color:red" $ "world"
 
   return ()
 
