@@ -1,12 +1,13 @@
 name:                haste-perch
-version:             0.1.0.3
-synopsis:            Create, navigate and modify the DOM tree with composable syntax, with the haste compiler 
+version:             0.1.0.4
+synopsis:            Create, navigate and modify the DOM tree with composable syntax, with the haste compiler
 description:         see the description at the homepage.
-        
+                     This version add JQuery-like DOM manipulation
+
 homepage:            https://github.com/agocorona/haste-perch
 license:             GPL-3
 license-file:        LICENSE
-author:              Alberto G. Corona 
+author:              Alberto G. Corona
 maintainer:          agocorona@gmail.com
 bug-reports:         https://github.com/agocorona/haste-perch/issues
 category:            Web
@@ -36,7 +37,7 @@ library
   build-depends:        base >4.0 && <5,
                         transformers,
                         haste-compiler
-                        
-  -- hs-source-dirs:      
+
+  -- hs-source-dirs:
   default-language:    Haskell2010
 
