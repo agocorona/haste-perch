@@ -16,6 +16,10 @@ http://hackage.haskell.org/package/blaze-html
 This is an example. `withElem`  is a Haste.DOM call that give the DOM object whose id is "idelem", that has been created "by hand" in Main.hs. The program takes this element and add content to it:
 
 ```haskell
+import Haste.Perch
+import Haste
+import Prelude hiding (div)
+
 main :: IO ()
 main = do
   withElem "idelem" $ build $ do
