@@ -45,10 +45,6 @@ This other example modifies the previosly created elements when the event is rai
 ```haskell
 import Haste.Perch
 import Haste
-import Haste.Foreign
-import Data.Maybe
-import Data.Monoid
-import Control.Monad.IO.Class
 import Prelude hiding (div)
 
 main= do
