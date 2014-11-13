@@ -16,6 +16,10 @@ http://hackage.haskell.org/package/blaze-html
 This is an example. `withElem`  is a Haste.DOM call that give the DOM object whose id is "idelem", that has been created "by hand" in Main.hs. The program takes this element and add content to it:
 
 ```haskell
+import Haste.Perch
+import Haste
+import Prelude hiding (div)
+
 main :: IO ()
 main = do
   withElem "idelem" $ build $ do
@@ -38,6 +42,24 @@ Creates these element:
     </div>
   </div>
 </div>
+```
+
+This other example modifies the previosly created elements when the event is raised using jQuery-like wildcards to modify all the elements of the class ".modify":
+
+```haskell
+import Haste.Perch
+import Haste
+import Prelude hiding (div)
+
+main= do
+  body <- getBody
+  (flip build) body $ do
+      div ! atr "class" "modify" $ "click"
+      div $ "not changed"
+      div ! atr "class" "modify" $ "here"
+      
+      addEvent this OnClick $ \_ _ -> do
+          forElems' ".modify" $ this ! style "color:red" `child` " modified"
 ```
 
 The  monoid expression can also be used, by concatenating elements with the operator <>
