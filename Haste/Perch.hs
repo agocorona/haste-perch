@@ -12,7 +12,7 @@
 -- current parent element. It uses Haste.DOM from the haste-compiler
 --
 -----------------------------------------------------------------------------
-{-#LANGUAGE TypeSynonymInstances, FlexibleInstances
+{-#LANGUAGE CPP, ForeignFunctionInterface, TypeSynonymInstances, FlexibleInstances
             , OverloadedStrings, DeriveDataTypeable, UndecidableInstances
             , OverlappingInstances #-}
 module Haste.Perch where
@@ -41,7 +41,7 @@ instance Monoid (PerchM a) where
 
 instance Monad PerchM where
    (>>) x y= mappend (unsafeCoerce x) y
-   (>>=) = error "bind (>>=) invocation creating DOM elements"
+   (>>=) = error "bind (>>=) invocation in the Perch monad creating DOM elements"
    return  = mempty
 
 instance MonadIO PerchM where
@@ -90,7 +90,7 @@ setHtml me text= Perch $ \e' -> do
   inner :: Elem -> String -> IO ()
   inner e txt = setProp e "innerHTML" txt
 
-
+-- | create an element and add a Haste event handler to it.
 addEvent :: Perch -> Event IO a -> a -> Perch
 addEvent be event action= Perch $ \e -> do
      e' <- build be e
@@ -103,6 +103,33 @@ addEvent be event action= Perch $ \e -> do
         setAttr e' atr "true"
         return e'
 
+-- | create an element and add any event handler to it.
+addEvent' :: Perch -> String -> a -> Perch
+addEvent' be event action= Perch $ \e -> do
+     e' <- build be e
+     has <- getAttr e'  event
+     case has of
+       "true" -> return e'
+       _ -> do
+        listen e'  event  action
+        setAttr e' event "true"
+        return e'
+
+instance JSType JSString where
+  toJSString x= x
+  fromJSString x= Just x
+
+listen :: JSType event => Elem -> event -> a -> IO Bool
+listen e event f= jsSetCB e (toJSString event) (mkCallback $! f)
+
+#ifdef __HASTE__
+foreign import ccall jsSetCB :: Elem -> JSString -> JSFun a -> IO Bool
+
+#else
+jsSetCB :: Elem -> JSString -> JSFun a -> IO Bool
+jsSetCB = error "Tried to use jsSetCB on server side!"
+
+#endif
 
 
 -- Leaf DOM nodes
@@ -285,6 +312,9 @@ parent= ffi "(function(e){return e.parentNode;})"
 
 getBody :: IO Elem
 getBody= ffi "(function(){return document.body;})"
+
+getDocument :: IO Elem
+getDocument= ffi  "(function(){return document;})"
 
 
 
