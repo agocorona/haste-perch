@@ -13,12 +13,11 @@
 --
 -----------------------------------------------------------------------------
 {-#LANGUAGE CPP, ForeignFunctionInterface, TypeSynonymInstances, FlexibleInstances
-            , OverloadedStrings, DeriveDataTypeable, UndecidableInstances
+             , DeriveDataTypeable, UndecidableInstances
             , OverlappingInstances #-}
-module Haste.Perch where
+module Haste.Perch.Client where
 import Data.Typeable
-import Haste
-import Haste.DOM
+import Haste.App
 import Haste.Foreign
 import Data.Maybe
 import Data.Monoid
@@ -28,7 +27,7 @@ import Control.Monad.IO.Class
 import Control.Applicative
 
 
-newtype PerchM a= Perch{build :: Elem -> IO Elem} deriving Typeable
+newtype PerchM a= Perch{build :: Elem -> Client Elem} deriving Typeable
 
 type Perch = PerchM ()
 
@@ -48,7 +47,7 @@ instance Monad PerchM where
    return  = mempty
 
 instance MonadIO PerchM where
-  liftIO mx= Perch $ \e -> mx >> return e
+  liftIO mx= Perch $ \e ->  liftIO mx >> return e
 
 instance IsString Perch where
   fromString= toElem
@@ -90,11 +89,11 @@ setHtml me text= Perch $ \e' -> do
     inner e text
     return e'
   where
-  inner :: Elem -> String -> IO ()
+  inner :: Elem -> String -> Client ()
   inner e txt = setProp e "innerHTML" txt
 
 -- | create an element and add a Haste event handler to it.
-addEvent :: Perch -> Event IO a -> a -> Perch
+addEvent :: ClientCallback a => Perch -> Event Client a -> a -> Perch
 addEvent be event action= Perch $ \e -> do
      e' <- build be e
      let atr= evtName event
@@ -106,33 +105,14 @@ addEvent be event action= Perch $ \e -> do
         setAttr e' atr "true"
         return e'
 
--- | create an element and add any event handler to it.
-addEvent' :: Perch -> String -> a -> Perch
-addEvent' be event action= Perch $ \e -> do
-     e' <- build be e
-     has <- getAttr e'  event
-     case has of
-       "true" -> return e'
-       _ -> do
-        listen e'  event  action
-        setAttr e' event "true"
-        return e'
+
 
 instance JSType JSString where
   toJSString x= x
   fromJSString x= Just x
 
-listen :: JSType event => Elem -> event -> a -> IO Bool
-listen e event f= jsSetCB e (toJSString event) (mkCallback $! f)
 
-#ifdef __HASTE__
-foreign import ccall jsSetCB :: Elem -> JSString -> JSFun a -> IO Bool
 
-#else
-jsSetCB :: Elem -> JSString -> JSFun a -> IO Bool
-jsSetCB = error "Tried to use jsSetCB on server side!"
-
-#endif
 
 
 -- Leaf DOM nodes
@@ -162,7 +142,7 @@ abbr cont = nelem  "abbr" `child` cont
 address cont = nelem  "address" `child` cont
 article cont = nelem  "article" `child` cont
 aside cont = nelem  "aside" `child` cont
-audio cont = nelem  "audio" `child` cont
+audClient cont = nelem  "audio" `child` cont
 b cont = nelem  "b" `child` cont
 bdo cont = nelem  "bdo" `child` cont
 blockquote cont = nelem  "blockquote" `child` cont
@@ -293,14 +273,14 @@ this= Perch $ \e -> return e
 goParent :: Perch -> Perch -> Perch
 goParent pe pe'= Perch $ \e' -> do
   e <- build pe e'
-  p <- parent e
+  p <- liftIO  $ parent e
   e2 <- build pe' p
   return e2
 
 -- | delete the current node. Return the parent
 delete :: Perch
 delete= Perch $ \e -> do
-             p <- parent e
+             p <- liftIO $ parent e
              removeChild e p
              return p
 
@@ -310,14 +290,14 @@ clear= Perch $ \e -> clearChildren e >> return e
 
 
 parent :: Elem -> IO Elem
-parent= ffi "(function(e){return e.parentNode;})"
+parent= ffi $ toJSString "(function(e){return e.parentNode;})"
 
 
 getBody :: IO Elem
-getBody= ffi "(function(){return document.body;})"
+getBody= ffi $ toJSString "(function(){return document.body;})"
 
 getDocument :: IO Elem
-getDocument= ffi  "(function(){return document;})"
+getDocument= ffi $ toJSString  "(function(){return document;})"
 
 
 
@@ -335,7 +315,7 @@ getDocument= ffi  "(function(){return document;})"
 -- >
 -- >      addEvent this OnClick $ \_ _ -> do
 -- >          forElems' ".modify" $  this ! style "color:red"
-forElems' :: String -> Perch -> IO ()
+forElems' :: String -> Perch -> Client ()
 forElems' for doit= do
     (flip build) undefined (forElems for doit)
     return ()
@@ -344,10 +324,10 @@ forElems' for doit= do
 -- it apply the Perch DOM manipulation of the second parameter for each of the matches
 forElems :: String -> Perch -> Perch
 forElems selectors dosomething= Perch $ \e -> do
-    es <- queryAll  selectors
+    es <- liftIO $ queryAll  selectors
     mapM (build dosomething) es
     return e
     where
     queryAll ::  String -> IO  [Elem]
-    queryAll = ffi "(function(sel){return document.querySelectorAll(sel);})"
+    queryAll = ffi $ toJSString "(function(sel){return document.querySelectorAll(sel);})"
 
