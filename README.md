@@ -84,7 +84,11 @@ install Haste:
 
     >cabal install haste-compiler
 
-clone haskell-js-html-builder
+boot Haste:
+
+    >haste-boot
+
+clone haste-perch
 
     >git clone http://github.com/agocorona/haste-perch.git
 
