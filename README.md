@@ -94,6 +94,7 @@ clone haste-perch
 
 install perch
 
+    >cd haste-perch
     >haste-inst install
 
 compile the main program
