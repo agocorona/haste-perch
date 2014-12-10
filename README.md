@@ -1,5 +1,6 @@
 perch
 =================
+![perch](http://www.designboom.com/history/wirehangers/whnew.gif)
 
 Perch defines builder elements (perchs) for Haste.DOM elements that are appendable, so that dynamic HTML can be created in the client in a natural way, like textual HTML, but programmatically and with the advantage of static type checking. It can be ported to other haskell-js compilers
 
