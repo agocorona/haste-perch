@@ -114,13 +114,14 @@ etc.
 How it works
 ------------
 
-The basic element is a "builder" that has a "hole" parameter and a IO action about what element will be created. The hole will receive the parent (Elem) of the element/s that will be created by the builder. So a builder can be considered like a perch that has other perchs that hang from it. either a single element or an entire tree.
+The basic element is a "builder" that has a "hole" parameter and a IO action which creates the DOM element. The hole will receive the parent (Elem) of the element/s that will be created by the builder. So a builder can be considered like a perch that has other perchs that hang from it. Either a no one or an entire tree.
 
-the call `nelem` (new element) is a perch that creates a single tag element. Upon created, it  is added to the parent and return itself as parent of the next elements that can be hooked. To append two elements, both are added to the parent.
+the call `nelem` (new element) is a perch that creates a single DOM element. Upon created, it  is added to the parent and return itself as parent of the next elements that can be hooked from it if `child` is used. When appending two elements, both are added to the parent.
 
 The Monad instance is there in order to use the do notation, that add a new level of syntax, in the style of the package blaze-html. This monad invokes the same appending mechanism.
 
-A perch is a generalization of a list and it is handled in the same way;
-while a list is an unary tree, perch create n-ary trees. While in a list the monoid instance add child nodes
+A perch is a generalization of a list and it is handled in the same way.
+
+While a list is an unary tree, perch create n-ary trees. While in a list the monoid instance add child nodes
 down in the only direction that it can grow, the perch monoid add childs at the same level, horizontally.
 Is the `child` primitive the one that creates branches down.
