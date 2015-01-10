@@ -106,15 +106,6 @@ addEvent be event action= Perch $ \e -> do
         return e'
 
 
-
-instance JSType JSString where
-  toJSString x= x
-  fromJSString x= Just x
-
-
-
-
-
 -- Leaf DOM nodes
 --
 area = nelem "area"

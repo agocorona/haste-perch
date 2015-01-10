@@ -118,10 +118,6 @@ addEvent' be event action= Perch $ \e -> do
         setAttr e' event "true"
         return e'
 
-instance JSType JSString where
-  toJSString x= x
-  fromJSString x= Just x
-
 listen :: JSType event => Elem -> event -> a -> IO Bool
 listen e event f= jsSetCB e (toJSString event) (mkCallback $! f)
 
