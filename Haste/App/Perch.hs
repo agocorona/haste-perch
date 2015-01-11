@@ -18,7 +18,7 @@
             , OverlappingInstances #-}
 module Haste.App.Perch where
 import Data.Typeable
-import Haste.App
+import Haste.App hiding (Attribute,attr)
 import Haste.Foreign
 import Data.Maybe
 import Data.Monoid

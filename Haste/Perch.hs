@@ -106,33 +106,30 @@ addEvent be event action= Perch $ \e -> do
         setAttr e' atr "true"
         return e'
 
--- | create an element and add any event handler to it.
-addEvent' :: Perch -> String -> a -> Perch
-addEvent' be event action= Perch $ \e -> do
-     e' <- build be e
-     has <- getAttr e'  event
-     case has of
-       "true" -> return e'
-       _ -> do
-        listen e'  event  action
-        setAttr e' event "true"
-        return e'
+
+
 
 instance JSType JSString where
   toJSString x= x
   fromJSString x= Just x
 
+-- | unsafe event handler for arbitrary events
+--
+-- listen  element  "click"   doit
+--
+-- > doit :: Int -> (Int,Int) -> IO ()
+-- > doit i (x,y)  = do
+-- >  body <- getBody
+-- >   (flip build) body $ do
+-- >     p i
+-- >     p (x,y)
+-- >   return()
+-- It is unsafe. You must make sure that the event handler has the right types of parameters. The types for the known events are the ones of the used in haste `onEvent`
 listen :: JSType event => Elem -> event -> a -> IO Bool
 listen e event f= jsSetCB e (toJSString event) (mkCallback $! f)
 
-#ifdef __HASTE__
+
 foreign import ccall jsSetCB :: Elem -> JSString -> JSFun a -> IO Bool
-
-#else
-jsSetCB :: Elem -> JSString -> JSFun a -> IO Bool
-jsSetCB = error "Tried to use jsSetCB on server side!"
-
-#endif
 
 
 -- Leaf DOM nodes
@@ -340,6 +337,9 @@ forElems' for doit= do
     (flip build) undefined (forElems for doit)
     return ()
 
+-- | a more declarative synmonym of `forElems'`
+withElems'= forElems'
+
 -- ! JQuery-like DOM manipulation: using a selector for querySelectorAll,
 -- it apply the Perch DOM manipulation of the second parameter for each of the matches
 forElems :: String -> Perch -> Perch
@@ -351,3 +351,5 @@ forElems selectors dosomething= Perch $ \e -> do
     queryAll ::  String -> IO  [Elem]
     queryAll = ffi "(function(sel){return document.querySelectorAll(sel);})"
 
+-- | a more declarative synmonym of `forElems`
+withElems= forElems
