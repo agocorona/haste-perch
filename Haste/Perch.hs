@@ -109,22 +109,7 @@ addEvent be event action= Perch $ \e -> do
 
 
 
-instance JSType JSString where
-  toJSString x= x
-  fromJSString x= Just x
 
--- | unsafe event handler for arbitrary events
---
--- listen  element  "click"   doit
---
--- > doit :: Int -> (Int,Int) -> IO ()
--- > doit i (x,y)  = do
--- >  body <- getBody
--- >   (flip build) body $ do
--- >     p i
--- >     p (x,y)
--- >   return()
--- It is unsafe. You must make sure that the event handler has the right types of parameters. The types for the known events are the ones of the used in haste `onEvent`
 listen :: JSType event => Elem -> event -> a -> IO Bool
 listen e event f= jsSetCB e (toJSString event) (mkCallback $! f)
 
