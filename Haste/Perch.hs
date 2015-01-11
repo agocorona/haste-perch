@@ -18,7 +18,7 @@
 module Haste.Perch where
 import Data.Typeable
 import Haste
-import Haste.DOM
+import Haste.DOM hiding (Attribute, attr)
 import Haste.Foreign
 import Data.Maybe
 import Data.Monoid
