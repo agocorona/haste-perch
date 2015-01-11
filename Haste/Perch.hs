@@ -17,7 +17,7 @@
             , OverlappingInstances #-}
 module Haste.Perch where
 import Data.Typeable
-import Haste
+import Haste hiding (Attribute, attr)
 import Haste.DOM hiding (Attribute, attr)
 import Haste.Foreign
 import Data.Maybe
