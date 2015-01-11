@@ -78,14 +78,14 @@ Is equivalent to
 How to run
 ----------
 
-## Docker file
+### Docker file
 
 
 https://registry.hub.docker.com/u/agocorona/tryhplay/
 
 Contains everything necessary to use haste-perch
 
-## install from scratch
+### install from scratch
 
 install the ghc compiler
 
