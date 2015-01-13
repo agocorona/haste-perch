@@ -1,5 +1,5 @@
 name: haste-perch
-version: 0.1.0.6
+version: 0.1.0.7
 cabal-version: >=1.10
 build-type: Simple
 license: GPL-3
