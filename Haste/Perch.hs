@@ -110,11 +110,11 @@ addEvent be event action= Perch $ \e -> do
 
 
 
-listen :: JSType event => Elem -> event -> a -> IO Bool
-listen e event f= jsSetCB e (toJSString event) (mkCallback $! f)
-
-
-foreign import ccall jsSetCB :: Elem -> JSString -> JSFun a -> IO Bool
+--listen :: JSType event => Elem -> event -> a -> IO Bool
+--listen e event f= jsSetCB e (toJSString event) (mkCallback $! f)
+--
+--
+--foreign import ccall jsSetCB :: Elem -> JSString -> JSFun a -> IO Bool
 
 
 -- Leaf DOM nodes
