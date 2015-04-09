@@ -269,13 +269,13 @@ goParent pe pe'= Perch $ \e' -> do
   e2 <- build pe' p
   return e2
 
---| replace the current node by a new one
+-- | replace the current node with a new one
 outer ::  Perch -> Perch -> Perch
 outer olde  newe= Perch $ \e'' -> do
    e  <- build olde e''
    e' <- build newe e''
    replace e e'
-
+   
 replace :: Elem -> Elem -> IO Elem      
 replace= ffi $ toJSString "(function(e,e1){\
       \var par=  e.parentNode;\
