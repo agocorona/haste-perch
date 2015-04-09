@@ -274,13 +274,11 @@ outer ::  Perch -> Perch -> Perch
 outer olde  newe= Perch $ \e'' -> do
    e  <- build olde e''
    e' <- build newe e''
-   replace e e'
-   
-replace :: Elem -> Elem -> IO Elem      
-replace= ffi $ toJSString "(function(e,e1){\
-      \var par=  e.parentNode;\
-      \par.replaceChild(e1,e);\
-      \return e1;})"
+   liftIO $ replace e e'
+
+replace :: Elem -> Elem -> IO Elem
+replace= ffi $ toJSString "(function(e,e1){var par=  e.parentNode;par.replaceChild(e1,e);return e1;})"
+
 
 -- | delete the current node. Return the parent
 delete :: Perch
