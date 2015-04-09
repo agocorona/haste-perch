@@ -17,8 +17,9 @@
             , OverlappingInstances #-}
 module Haste.Perch where
 import Data.Typeable
-import Haste hiding (Attribute, attr)
+import Haste hiding (Attribute)
 import Haste.DOM hiding (Attribute, attr)
+import Haste.Events
 import Haste.Foreign
 import Data.Maybe
 import Data.Monoid
@@ -94,10 +95,10 @@ setHtml me text= Perch $ \e' -> do
   inner e txt = setProp e "innerHTML" txt
 
 -- | create an element and add a Haste event handler to it.
-addEvent :: Perch -> Event IO a -> a -> Perch
+--addEvent :: Perch -> Event IO a -> a -> Perch
 addEvent be event action= Perch $ \e -> do
      e' <- build be e
-     let atr= evtName event
+     let atr= fromJSStr $ eventName event
      has <- getAttr e'  atr
      case has of
        "true" -> return e'
