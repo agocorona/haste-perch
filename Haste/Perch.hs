@@ -265,7 +265,7 @@ href= atr "href"
 src= atr "src"
 
 
----------------- DOM Tree navigation
+---------------- DOM Tree navigation and edition
 
 -- | return the current node
 this :: Perch
@@ -290,6 +290,18 @@ delete= Perch $ \e -> do
 clear :: Perch
 clear= Perch $ \e -> clearChildren e >> return e
 
+--| replace the current node by a new one
+outer ::  Perch -> Perch -> Perch
+outer olde  newe= Perch $ \e'' -> do
+   e  <- build olde e''
+   e' <- build newe e''
+   replace e e'
+
+replace :: Elem -> Elem -> IO Elem      
+replace= ffi $ toJSString "(function(e,e1){\
+      \var par=  e.parentNode;\
+      \par.replaceChild(e1,e);\
+      \return e1;})"
 
 parent :: Elem -> IO Elem
 parent= ffi "(function(e){return e.parentNode;})"
