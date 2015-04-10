@@ -19,13 +19,15 @@ This is an example. `withElem`  is a Haste.DOM call that give the DOM object who
 ```haskell
 import Haste.Perch
 import Haste
+import Haste.Events
+import Haste.DOM
 import Prelude hiding (div)
 
 main :: IO ()
 main = do
-  withElem "idelem" $ build $ do
+  withElem "root" $ build $ do
     div $ do
-      addEvent this OnClick $ \_ _ -> alert "hello, world!"
+      addEvent this Click $ \_ -> alert "hello, world!"
       div $ do
         p "hello"
         p ! atr "style" "color:red" $ "world"
@@ -50,6 +52,8 @@ This other example modifies the previosly created elements when the event is rai
 ```haskell
 import Haste.Perch
 import Haste
+import Haste.Events
+import Haste.DOM hiding (style)
 import Prelude hiding (div)
 
 main= do
@@ -58,8 +62,8 @@ main= do
       div ! atr "class" "modify" $ "click"
       div $ "not changed"
       div ! atr "class" "modify" $ "here"
-      
-      addEvent this OnClick $ \_ _ -> do
+
+      addEvent this Click $ \_ -> do
           forElems' ".modify" $ this ! style "color:red" `child` " modified"
 ```
 
