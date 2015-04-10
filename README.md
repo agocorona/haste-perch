@@ -25,7 +25,7 @@ import Prelude hiding (div)
 
 main :: IO ()
 main = do
-  withElem "root" $ build $ do
+  withElem "idelem" $ build $ do
     div $ do
       addEvent this Click $ \_ -> alert "hello, world!"
       div $ do
