@@ -1,6 +1,6 @@
 Perch
 =================
-NOTE: This version works with the version 5.0 of haste-compiler, get it from the git repo:
+NOTE: This version works with the version 0.5 of haste-compiler, get it from the git repo:
 
 https://github.com/valderman/haste-compiler
 
