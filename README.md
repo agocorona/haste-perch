@@ -89,7 +89,7 @@ How to run
 ### Docker file
 
 
-https://registry.hub.docker.com/u/agocorona/tryhplay/
+https://hub.docker.com/r/agocorona/tryhplay
 
 Contains everything necessary to use haste-perch
 
